@@ -18,10 +18,9 @@ class EntityType(Enum):
     WATER.weakness=GRASS
 
     def multiplier(self,type):
-        if self.weakness==type:
+        if self.value.weakness==type:
             return .5
-        elif self.strength==type:
+        elif self.value.strength==type:
             return 2
         else:
             return 1
-    

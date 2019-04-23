@@ -13,11 +13,16 @@ class Inventory:
             yield other_item
 
     def current_weapon(self):
+        if len(self.weapons)==0:
+            self.weapons.append(__default_weapon())
         return self.weapons[0]
 
     def damage_current_weapon(self):
         if self.current_weapon()._damage():
-            self.weapons.remove(0)
+            self.weapons=[__default_weapon()] if len(self.weapons)==0 else self.weapons[1:]
+
+    def __default_weapon():
+        return Weapon("Fists",1,10)
 
 class Weapon:
     def __init__(self, name, damage, durability):

@@ -6,6 +6,7 @@ class Entity:
         self.inventory=inventory
         self.speed=speed
         self.type=type
+        self.name=name
 
     def _armor_protection(self):
         return sum(map(lambda armor: armor.prot, self.inventory.armor))
