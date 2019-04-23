@@ -1,5 +1,4 @@
 from random import sample
-from entity import Entity
 class Turn:
     def __init__(self, entity_one, entity_two):
         self.entity_one=entity_one
@@ -21,7 +20,7 @@ class Turn:
         (faster, slower)=_resolve_speed()
         faster_dmg=faster.damage(slower)
         slower_dmg=0
-        if !slower.is_dead():
+        if not slower.is_dead():
             slower_dmg=slower.damage(faster)
         self.faster_entity=faster
         self.slower_entity=slower

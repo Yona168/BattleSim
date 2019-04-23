@@ -1,5 +1,5 @@
 class Inventory:
-    def __init__(self, armor, weapons, other_items):
+    def __init__(self, armor=list(), weapons=list(), other_items=list()):
         self.armor=armor
         self.weapons=weapons
         self.other_items=other_items
@@ -26,7 +26,7 @@ class Weapon:
         self.durability=durability
 
     def _damage(self):
-        self.durability--
+        self.durability-=1
         return True if self.durability==0 else False
 
 

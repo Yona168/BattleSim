@@ -1,6 +1,5 @@
-from inventory import Inventory
-from element import EntityType
 from random import uniform
+from .element import EntityType
 class Entity:
     def __init__(self, name, health, inventory, speed, type=EntityType.NEUTRAL):
         self.health=health
