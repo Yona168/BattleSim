@@ -1,5 +1,6 @@
 from random import sample
 from enum import Enum, auto
+from copy import deepcopy
 class Turn:
     def __init__(self, entity_one, entity_two):
         self.entity_one=entity_one
@@ -10,10 +11,10 @@ class Turn:
             first=self.entity_one
             second=self.entity_two
             if self.entity_one.speed==self.entity_two.speed:
-                first=sample([self.entity_one, self.entity_two],1)
+                first=sample([self.entity_one, self.entity_two],1)[0]
                 second=self.entity_one if first==self.entity_two else self.entity_one
             else:
-                sorted_list=sorted([self.entity_one, self.entity_two], key=lambda entity: entity.speed)
+                sorted_list=sorted([self.entity_one, self.entity_two], key=lambda entity: entity.speed, reverse=True)
                 first=sorted_list[0]
                 second=sorted_list[1]
             return (first, second)
@@ -23,13 +24,15 @@ class Turn:
         slower_dmg=0
         if not slower.is_dead():
             slower_dmg=slower.damage(faster)
-        self.faster_entity=faster
-        self.slower_entity=slower
+        self.faster_entity=faster.snapshot()
+        self.slower_entity=slower.snapshot()
         self.faster_dmg=faster_dmg
         self.slower_dmg=slower_dmg
+
 class State(Enum):
     ACTIVE=auto(),
     ENDED=auto();
+
 class Game:
     def __init__(self,entity_one, entity_two, output_func):
         self.entity_one=entity_one
@@ -43,10 +46,10 @@ class Game:
         turn.resolve()
         self.output_func(">>{0} hit {1} for {2} health!".format(turn.faster_entity.name, turn.slower_entity.name, turn.faster_dmg))
         if turn.slower_entity.is_dead():
-            self.output_func(">>{0} died!".format(turn.slower_entity))
+            self.output_func(">>{0} died!".format(turn.slower_entity.name))
+            self.end()
         else:
             self.output_func(">>{0} hit {1} for {2} health!".format(turn.slower_entity.name, turn.faster_entity.name, turn.slower_dmg))
-            self.end()
         self.turns.append(turn)
 
     def end(self):

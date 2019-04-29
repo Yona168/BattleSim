@@ -1,4 +1,6 @@
 class Inventory:
+    def_weapon_supplier=lambda _: Weapon("Fists", 1, 10)
+
     def __init__(self, armor=list(), weapons=list(), other_items=list()):
         self.armor=armor
         self.weapons=weapons
@@ -14,21 +16,21 @@ class Inventory:
 
     def current_weapon(self):
         if len(self.weapons)==0:
-            self.weapons.append(__default_weapon())
+            self.weapons.append(self.def_weapon_supplier())
         return self.weapons[0]
 
     def damage_current_weapon(self):
         if self.current_weapon()._damage():
-            self.weapons=[__default_weapon()] if len(self.weapons)==0 else self.weapons[1:]
+            self.weapons=[self.def_weapon_supplier()] if len(self.weapons)==0 else self.weapons[1:]
 
-    def __default_weapon():
-        return Weapon("Fists",1,10)
+
 
 class Weapon:
     def __init__(self, name, damage, durability):
         self.name=name
         self.damage=damage
         self.durability=durability
+        self._bypass_offset=False
 
     def _damage(self):
         self.durability-=1
