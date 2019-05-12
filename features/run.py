@@ -8,6 +8,7 @@ def run_tests(output_type, capture_output):
     battle_sim_folder=abspath(dirname(dirname(__file__)))
     test_folder=abspath(dirname(__file__))
     output_folder=join(battle_sim_folder, 'test_output')
+
     def run(args, capture):
         sys.path.insert(0, battle_sim_folder)
         if not capture:
@@ -32,9 +33,7 @@ def run_tests(output_type, capture_output):
                 new_file.write(new_json)
 
     def _allure(capture):
-        allure_folder=join(output_folder, 'allure')
-        run(['behave -f allure_behave.formatter:AllureFormatter -o {0}'.format(allure_folder)], capture)
-        subprocess.run('allure serve {0}'.fomrat(allure_folder))
+        run('behave -f allure_behave.formatter:AllureFormatter -o {0} {1}'.format("test_output/allure", "./features").split(), capture)
 
     outputs={'json':_normal_json,'cucumber':_cucumber, 'allure':_allure}
     runner=outputs.get(output_type)
