@@ -21,7 +21,7 @@ class Turn:
 
         (faster, slower)=_resolve_speed()
         faster_dmg=faster.damage(slower)
-        slower_dmg=0
+        slower_dmg=None
         if not slower.is_dead():
             slower_dmg=slower.damage(faster)
         self.faster_entity=faster.snapshot()
@@ -44,12 +44,13 @@ class Game:
     def progress(self):
         turn=Turn(self.entity_one, self.entity_two)
         turn.resolve()
+        dead_entity=next((x for x in (turn.entity_one, turn.entity_two) if x.is_dead()), None)
         self.output_func(">>{0} hit {1} for {2} health!".format(turn.faster_entity.name, turn.slower_entity.name, turn.faster_dmg))
-        if turn.slower_entity.is_dead():
-            self.output_func(">>{0} died!".format(turn.slower_entity.name))
-            self.end()
-        else:
+        if not turn.slower_dmg is None:
             self.output_func(">>{0} hit {1} for {2} health!".format(turn.slower_entity.name, turn.faster_entity.name, turn.slower_dmg))
+        if not dead_entity is None:
+            self.output_func(">>{0} died!".format(dead_entity.name))
+            self.end()
         self.turns.append(turn)
 
     def end(self):

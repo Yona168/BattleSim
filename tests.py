@@ -1,3 +1,3 @@
-import features
 from features import run
-run.run_tests()
+from sys import argv
+run.run_tests('json' if len(argv)==1 else argv[1],False)
