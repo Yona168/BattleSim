@@ -1,8 +1,10 @@
 import subprocess
-from os.path import dirname, abspath, join
+from os.path import dirname, abspath, join, isdir
+from os import mkdir
 from behave2cucumber import convert
 import sys
 from json import load, dumps
+from shutil import rmtree
 
 def run_tests(output_type, capture_output):
     battle_sim_folder=abspath(dirname(dirname(__file__)))
@@ -33,6 +35,10 @@ def run_tests(output_type, capture_output):
                 new_file.write(new_json)
 
     def _allure(capture):
+        allure_folder=join(output_folder, "allure")
+        if isdir(allure_folder):
+            rmtree(allure_folder)
+        mkdir(allure_folder, 0o777)
         run('behave -f allure_behave.formatter:AllureFormatter -o {0} {1}'.format("test_output/allure", "./features").split(), capture)
 
     outputs={'json':_normal_json,'cucumber':_cucumber, 'allure':_allure}
